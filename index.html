@@ -5,80 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
-      .circle {
-        position: absolute;
-        width: 15px;
-        height: 15px;
-        border-radius: 50%;
-        background-color: rgb(212, 126, 13);
+      *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
-      #parent {
-        position: relative;
-      }
-      #wrapper {
-        width: 100%;
+
+      body {
         height: 100vh;
       }
-      button {
-        margin: 10px;
+
+      #wrapper{
+        display: inline-block;
+        padding: 10px;
+        border: 1px solid black;
       }
     </style>
   </head>
   <body>
     <div id="wrapper">
-      <div id="btn"></div>
-      <div id="parent"></div>
+      <button id="reset" >Reset</button>
+      <button id="undo" >undo</button>
+      <button id="redo" >redo</button>
     </div>
 
     <script>
-      let Reset = document.createElement("button");
-      let undo = document.createElement("button");
-      let redoo = document.createElement("button");
-      const btn = document.querySelector("#btn");
-      Reset.disabled = true;
-      undo.disabled = true;
-      redoo.disabled = true;
+      let reset=document.querySelector("#reset");
+      let undo=document.querySelector("#undo");
+      let redo=document.querySelector("#redo");
 
-      Reset.innerText = "Reset";
-      undo.innerText = "undo";
-      redoo.innerText = "redoo";
 
-      btn.append(Reset, undo, redoo);
-
-      const arr = ["red", "green", "blue", "pink", "skyblue"];
-
-      const mainwrapper = document.getElementById("wrapper");
-    
-      function colochange() {
+      let undoo=[];
+      let redoo=[];
+      
+      
+      let arr = ["red", "green", "blue", "skyblue", "brown"];
+      const Body = document.body;
+      
+      function colorchange() {
+        console.log(Math.floor(Math.random()*arr.length))
         return arr[Math.floor(Math.random() * arr.length)];
       }
-      let parent = document.querySelector("#parent");
-      mainwrapper.onclick = (e) => {
-        
-        let child = document.createElement("div");
-
-        const color = colochange();
+      Body.addEventListener("click", (e) => {
        
-        var x = e.offsetX - 6;
-        var y = e.offsetY - 45;
+    
+       if(e.target.nodeName==="DIV"||e.target.nodeName==="BUTTON")return
 
-        child.style.backgroundColor = color;
-        child.classList.add("circle");
-        child.style.top = `${y}px`;
-        child.style.left = `${x}px`;
-        parent.append(child);
+        else{
+          const color=colorchange()
+          console.log(color)
+         let x = e.offsetX-3;
+         let y = e.offsetY-6;
+         console.log(x, y);
+  
+         
+         const circle = document.createElement("div");
+         circle.style.width = "15px";
+         circle.style.height = "15px";
+         circle.style.borderRadius = "50%";
+         circle.style.backgroundColor =color;
+         circle.style.position = "absolute";
+         circle.style.top=`${y}px`;
+         circle.style.left=`${x}px`;
+  
+         Body.append(circle);
+         undoo.push(circle)
+         console.log(undoo)
+
+        }
+         
+       
+      
+      });
+    
+     
 
 
-        Reset.disabled = false;
-        undo.disabled = false;
-        e.stopImmediatepropagation();
-      };
 
-      Reset.onclick=(e)=>{
-          
+     
 
-            parent.innerHTML=""
-      }
     </script>
   </body>
 </html>
