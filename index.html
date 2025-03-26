@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
-      *{
+      * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
@@ -15,7 +15,7 @@
         height: 100vh;
       }
 
-      #wrapper{
+      #wrapper {
         display: inline-block;
         padding: 10px;
         border: 1px solid black;
@@ -24,66 +24,90 @@
   </head>
   <body>
     <div id="wrapper">
-      <button id="reset" >Reset</button>
-      <button id="undo" >undo</button>
-      <button id="redo" >redo</button>
+      <button id="reset">Reset</button>
+      <button id="undo">undo</button>
+      <button id="redo">redo</button>
     </div>
 
     <script>
-      let reset=document.querySelector("#reset");
-      let undo=document.querySelector("#undo");
-      let redo=document.querySelector("#redo");
+      let reset = document.querySelector("#reset").disabled="true";
+      let undo = document.querySelector("#undo");
+      let redo = document.querySelector("#redo");
 
+      let undoo = [];
+      let redoo = [];
 
-      let undoo=[];
-      let redoo=[];
-      
-      
       let arr = ["red", "green", "blue", "skyblue", "brown"];
       const Body = document.body;
-      
+     
+
       function colorchange() {
-        console.log(Math.floor(Math.random()*arr.length))
+        // console.log(Math.floor(Math.random() * arr.length));
         return arr[Math.floor(Math.random() * arr.length)];
       }
       Body.addEventListener("click", (e) => {
-       
-    
-       if(e.target.nodeName==="DIV"||e.target.nodeName==="BUTTON")return
+        
 
-        else{
-          const color=colorchange()
-          console.log(color)
-         let x = e.offsetX-3;
-         let y = e.offsetY-6;
-         console.log(x, y);
-  
-         
-         const circle = document.createElement("div");
-         circle.style.width = "15px";
-         circle.style.height = "15px";
-         circle.style.borderRadius = "50%";
-         circle.style.backgroundColor =color;
-         circle.style.position = "absolute";
-         circle.style.top=`${y}px`;
-         circle.style.left=`${x}px`;
-  
-         Body.append(circle);
-         undoo.push(circle)
-         console.log(undoo)
+        if (e.target.nodeName === "DIV" || e.target.nodeName === "BUTTON")
+          return;
+        else {
+          
+          const color = colorchange();
+          // console.log(color);
+          let x = e.offsetX - 3;
+          let y = e.offsetY - 6;
+          // console.log(x, y);
 
+          const circle = document.createElement("div");
+          circle.style.width = "15px";
+          circle.style.height = "15px";
+          circle.style.borderRadius = "50%";
+          circle.style.backgroundColor = color;
+          circle.style.position = "absolute";
+          circle.style.top = `${y}px`;
+          circle.style.left = `${x}px`;
+
+          Body.append(circle);
+          undoo.push(circle);
+          console.log(undoo);
+
+          reset.addEventListener("click", () => {
+                 const circle=undoo.pop()
+                 circle.remove();
+                 const c=redoo.pop()
+                 c.remove()
+               }); 
+               
         }
-         
-       
+
+      })
       
-      });
-    
-     
 
 
+        undo.addEventListener("click", (e) => {
+         e.preventDefault()
+         
+            const dotArr=undoo.pop()
+            Body.removeChild(dotArr)
+            redoo.push(dotArr)
+          
+           
+          })
+        
 
-     
-
+        
+            redo.addEventListener("click", () => {
+            
+            
+            const circles = redoo.pop();
+            Body.append(circles);
+            undoo.push(circles)
+           
+        
+        });
+       
+         
+          
     </script>
   </body>
 </html>
