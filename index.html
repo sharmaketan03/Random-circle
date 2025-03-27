@@ -10,6 +10,14 @@
         padding: 0;
         box-sizing: border-box;
       }
+      button{
+        padding:10px 30px;
+        background-color:blue;
+        opacity: 0.2;
+        border-radius:8px;
+        color:white;
+        font-weight: bold;
+      }
 
       body {
         height: 100vh;
@@ -18,21 +26,26 @@
       #wrapper {
         display: inline-block;
         padding: 10px;
-        border: 1px solid black;
+        /* border: 1px solid black; */
+        cursor: pointer;
       }
     </style>
   </head>
   <body>
     <div id="wrapper">
-      <button id="reset">Reset</button>
-      <button id="undo">undo</button>
-      <button id="redo">redo</button>
+      <button id="reset" disabled>Reset</button>
+      <button id="undo"  disabled >undo</button>
+      <button id="redo" disabled>redo</button>
+    </div>
+    <div class="appendvalue">
+      
     </div>
 
     <script>
-      let reset = document.querySelector("#reset").disabled="true";
+      let reset = document.querySelector("#reset");
       let undo = document.querySelector("#undo");
       let redo = document.querySelector("#redo");
+      let Maindiv=document.querySelector(".appendvalue")
 
       let undoo = [];
       let redoo = [];
@@ -51,7 +64,10 @@
         if (e.target.nodeName === "DIV" || e.target.nodeName === "BUTTON")
           return;
         else {
-          
+             
+         
+
+
           const color = colorchange();
           // console.log(color);
           let x = e.offsetX - 3;
@@ -67,28 +83,45 @@
           circle.style.top = `${y}px`;
           circle.style.left = `${x}px`;
 
-          Body.append(circle);
+          Maindiv.append(circle);
           undoo.push(circle);
           console.log(undoo);
 
-          reset.addEventListener("click", () => {
-                 const circle=undoo.pop()
-                 circle.remove();
-                 const c=redoo.pop()
-                 c.remove()
-               }); 
+          // document.querySelector("#reset").disabled="false"
+          // document.querySelector("#undo").disabled="false"
+          // document.querySelector("#redo").disabled="true"
+          document.querySelector("#reset").disabled="";
+          document.querySelector("#undo").disabled="";
+          document.querySelector("#redo").disabled="true";
+
+          document.querySelector("#reset").style.opacity="1";
+          document.querySelector("#undo").style.opacity="1";
+
+        
                
         }
 
       })
       
+      reset.addEventListener("click", () => {
+                Maindiv.innerHTML=" "
+                document.querySelector("#reset").disabled="true";
+          document.querySelector("#undo").disabled="true";
+          document.querySelector("#redo").disabled="true";
+          document.querySelector("#reset").style.opacity="0.3";
+          document.querySelector("#undo").style.opacity="0.3";
+          document.querySelector("#redo").style.opacity="0.3";
+               }); 
 
+        undo.addEventListener("click", () => {
+        //  e.preventDefault()
 
-        undo.addEventListener("click", (e) => {
-         e.preventDefault()
-         
+      
+         document.querySelector("#redo").disabled="";
+         document.querySelector("#redo").style.opacity="1";
+           
             const dotArr=undoo.pop()
-            Body.removeChild(dotArr)
+            Maindiv.removeChild(dotArr)
             redoo.push(dotArr)
           
            
@@ -98,11 +131,15 @@
         
             redo.addEventListener("click", () => {
             
-            
-            const circles = redoo.pop();
-            Body.append(circles);
-            undoo.push(circles)
+              const circles = redoo.pop();
+            Maindiv.append(circles);
+            undoo.push(circles);
+            if(redoo.length===0){
+              document.querySelector("#redo").disabled="true";
+              document.querySelector("#redo").style.opacity="0.3";
+            }
            
+            
         
         });
        
