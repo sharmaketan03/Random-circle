@@ -10,17 +10,23 @@
         padding: 0;
         box-sizing: border-box;
       }
-      button{
-        padding:10px 30px;
-        background-color:blue;
+      button {
+        padding: 10px 30px;
+        background-color: blue;
         opacity: 0.2;
-        border-radius:8px;
-        color:white;
+        border-radius: 8px;
+        color: white;
         font-weight: bold;
       }
 
       body {
         height: 100vh;
+      }
+      .circle {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        position: absolute;
       }
 
       #wrapper {
@@ -34,52 +40,42 @@
   <body>
     <div id="wrapper">
       <button id="reset" disabled>Reset</button>
-      <button id="undo"  disabled >undo</button>
+      <button id="undo" disabled>undo</button>
       <button id="redo" disabled>redo</button>
     </div>
-    <div class="appendvalue">
-      
-    </div>
+    <div class="appendvalue"></div>
 
     <script>
       let reset = document.querySelector("#reset");
       let undo = document.querySelector("#undo");
       let redo = document.querySelector("#redo");
-      let Maindiv=document.querySelector(".appendvalue")
+      let Maindiv = document.querySelector(".appendvalue");
 
       let undoo = [];
       let redoo = [];
 
       let arr = ["red", "green", "blue", "skyblue", "brown"];
       const Body = document.body;
-     
 
       function colorchange() {
         // console.log(Math.floor(Math.random() * arr.length));
         return arr[Math.floor(Math.random() * arr.length)];
       }
       Body.addEventListener("click", (e) => {
-        
-
         if (e.target.nodeName === "DIV" || e.target.nodeName === "BUTTON")
           return;
         else {
-             
-         
-
-
           const color = colorchange();
           // console.log(color);
-          let x = e.offsetX - 3;
-          let y = e.offsetY - 6;
+          let x = e.offsetX - 7.5;
+          let y = e.offsetY - 7.5;
           // console.log(x, y);
 
           const circle = document.createElement("div");
-          circle.style.width = "15px";
-          circle.style.height = "15px";
-          circle.style.borderRadius = "50%";
+          circle.classList.add("circle");
+
           circle.style.backgroundColor = color;
-          circle.style.position = "absolute";
+
           circle.style.top = `${y}px`;
           circle.style.left = `${x}px`;
 
@@ -90,61 +86,45 @@
           // document.querySelector("#reset").disabled="false"
           // document.querySelector("#undo").disabled="false"
           // document.querySelector("#redo").disabled="true"
-          document.querySelector("#reset").disabled="";
-          document.querySelector("#undo").disabled="";
-          document.querySelector("#redo").disabled="true";
+          document.querySelector("#reset").disabled = "";
+          document.querySelector("#undo").disabled = "";
+          document.querySelector("#redo").disabled = "true";
 
-          document.querySelector("#reset").style.opacity="1";
-          document.querySelector("#undo").style.opacity="1";
-
-        
-               
+          document.querySelector("#reset").style.opacity = "1";
+          document.querySelector("#undo").style.opacity = "1";
         }
+      });
 
-      })
-      
       reset.addEventListener("click", () => {
-                Maindiv.innerHTML=" "
-                document.querySelector("#reset").disabled="true";
-          document.querySelector("#undo").disabled="true";
-          document.querySelector("#redo").disabled="true";
-          document.querySelector("#reset").style.opacity="0.3";
-          document.querySelector("#undo").style.opacity="0.3";
-          document.querySelector("#redo").style.opacity="0.3";
-               }); 
+        Maindiv.innerHTML = " ";
+        document.querySelector("#reset").disabled = "true";
+        document.querySelector("#undo").disabled = "true";
+        document.querySelector("#redo").disabled = "true";
+        document.querySelector("#reset").style.opacity = "0.3";
+        document.querySelector("#undo").style.opacity = "0.3";
+        document.querySelector("#redo").style.opacity = "0.3";
+      });
 
-        undo.addEventListener("click", () => {
+      undo.addEventListener("click", () => {
         //  e.preventDefault()
 
-      
-         document.querySelector("#redo").disabled="";
-         document.querySelector("#redo").style.opacity="1";
-           
-            const dotArr=undoo.pop()
-            Maindiv.removeChild(dotArr)
-            redoo.push(dotArr)
-          
-           
-          })
-        
+        document.querySelector("#redo").disabled = "";
+        document.querySelector("#redo").style.opacity = "1";
 
-        
-            redo.addEventListener("click", () => {
-            
-              const circles = redoo.pop();
-            Maindiv.append(circles);
-            undoo.push(circles);
-            if(redoo.length===0){
-              document.querySelector("#redo").disabled="true";
-              document.querySelector("#redo").style.opacity="0.3";
-            }
-           
-            
-        
-        });
-       
-         
-          
+        const dotArr = undoo.pop();
+        Maindiv.removeChild(dotArr);
+        redoo.push(dotArr);
+      });
+
+      redo.addEventListener("click", () => {
+        const circles = redoo.pop();
+        Maindiv.append(circles);
+        undoo.push(circles);
+        if (redoo.length === 0) {
+          document.querySelector("#redo").disabled = "true";
+          document.querySelector("#redo").style.opacity = "0.3";
+        }
+      });
     </script>
   </body>
 </html>
